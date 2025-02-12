@@ -7,7 +7,8 @@ import Camera from './Camera.js'
 import Renderer from './Renderer.js'
 import World from './World/World.js'
 
-import sources from './sources.js'
+import sourcesModels from './sourcesModels.js'
+import sourcesMeshes from './sourcesMeshes.js'
 
 let instance = null;
 
@@ -21,15 +22,14 @@ export default class Experience {
         this.sizes = new Sizes()
         this.time = new Time()
         this.scene = new THREE.Scene()
-        this.resources = new Resources(sources)
+        this.resourcesModels = new Resources(sourcesModels)
+        this.resourcesMeshes = sourcesMeshes
         this.camera = new Camera()
         this.renderer = new Renderer()
         this.world = new World()
 
         this.sizes.on('resize', () => this.resize());
         this.time.on('tick', () => this.update());
-        
-        console.log('loaded: experience');
     }
     
     resize()
