@@ -21,6 +21,8 @@ export default class Model
 
         this.setModel()
         this.setAnimation()
+
+        console.log(this.model);
     }
 
     setModel()
@@ -30,23 +32,12 @@ export default class Model
             this.sourceModel.scale)
         this.scene.add(this.model)
 
-        this.model.traverse((child) =>
-        {
-            if (child instanceof THREE.Mesh)
-            {
-                child.castShadow = true
-            }
-        })
+        this.model.traverse((child) => child.castShadow = (child instanceof THREE.Mesh))
     }
-
     setAnimation()
     {
         this.animation = {}
-        
-        // Mixer
         this.animation.mixer = new THREE.AnimationMixer(this.model)
-        
-        // Actions
         this.animation.actions = {}
 
         for (let i = 0; i < this.source.animations.length; i++) {
@@ -56,21 +47,7 @@ export default class Model
         
         this.animation.actions.current = this.animation.actions[this.currentAnimation]
         this.animation.actions.current.play()
-
-        // Play the action
         this.playAnimation('Survey')
-        // this.animation.play = (name) =>
-        // {
-        //     const newAction = this.animation.actions[name]
-        //     const oldAction = this.animation.actions.current
-
-        //     newAction.reset()
-        //     newAction.play()
-        //     newAction.crossFadeFrom(oldAction, 1)
-
-        //     this.animation.actions.current = newAction
-        //     this.currentAnimation = newAction
-        // }
 
         // Debug
         if (this.debug.active)
@@ -85,7 +62,6 @@ export default class Model
             debugObject.stopAnimation = () => this.stopAnimation()
             this.debugFolder.add(debugObject, 'stopAnimation')
         }
-
     }
     playAnimation(name) {
         const newAction = this.animation.actions[name]
@@ -98,7 +74,6 @@ export default class Model
         this.animation.actions.current = newAction
         this.currentAnimation = newAction
     }
-    
     stopAnimation() {
         this.animation.mixer.stopAllAction()
     }
