@@ -13,4 +13,26 @@ body {
     top: 0;
     left: 0;
     outline: none;
+    z-index: -1;
 }
+ul {
+    display: flex;
+    list-style-type: none;
+    justify-content: end;
+    margin-right: 2.5rem;
+}
+li {
+    padding: 0.5rem;
+}
+
+svg {
+    width: auto;
+    height: 2rem;
+    fill: #B6174B;
+}
+
+.transparant svg {
+    opacity: 0.25;
+}
+
+

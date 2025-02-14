@@ -18,7 +18,9 @@ export default class World
         this.grassWidth = this.experience.resourcesMeshes.find(obj => obj.name == 'grass').width
         this.parameters = parameters.find(obj => obj.level == 'easy')
         this.matrix = matrix
+        this.forbiddenArea = {}
 
+        this.setBoundries()
         this.setModels()
         this.setMeshes()
     }
@@ -27,7 +29,7 @@ export default class World
         this.resourcesModels.on('ready', () =>
         {
             this.fox = new AnimatedEnemy('fox', 'Survey')
-            this.mouse = new AnimatedHunter('mouse', 'Survey')
+            this.mouse = new AnimatedHunter('mouse', 'Survey', this.parameters.amountTreasures)
         })
     }
 
@@ -38,32 +40,24 @@ export default class World
 
         for (let i = 0; i < this.parameters.amountStones; i++) {
             let randomY = i * 0.015
-            const location = new THREE.Vector3(this.matrix[i][0], randomY, this.matrix[i][1])
+            const location = new THREE.Vector3(this.matrix.stones[i][0], randomY, this.matrix.stones[i][1])
             this.stone = new Mesh('stone', location);
         }
         this.treasures = []
         for (let i = 0; i < this.parameters.amountTreasures; i++) {
-            const location = new THREE.Vector3(this.matrix[this.matrix.length - 1 - i][0], 0.35, this.matrix[this.matrix.length - 1 - i][1])
+            const location = new THREE.Vector3(this.matrix.treasures[this.matrix.treasures.length - 1 - i][0], 0.35, this.matrix.treasures[this.matrix.treasures.length - 1 - i][1])
             this.treasures[i] = new AnimatedMesh('berry', location);
         }
     }
-    // this.setMatrix(offset, totalAmount) {
-    //     const randomCoordinate = function(width, offset) {
-    //         return Math.round(Math.random() * width - offset)
-    //     }
-    //     let this.matrix = []
 
-    //     while (totalAmount) {
-    //         const location = [randomCoordinate(this.grassWidth, offset), randomCoordinate(this.grassWidth, offset)]
-    //         const locationExist = this.matrix.some( subArray => subArray.every( (val, index) => val === location[index] ) )
-            
-    //         if ( !locationExist ) {
-    //             this.matrix[totalAmount - 1] = location  
-    //             totalAmount--
-    //         }
-    //     }
-    //     return this.matrix
-    // }
+    setBoundries() {
+        this.forbiddenArea = {
+            Xmax: Math.floor(0 + (this.grassWidth / 2)  + 1),
+            Xmin: Math.ceil(0 - (this.grassWidth / 2)  - 1),
+            Zmax: Math.floor(0 + (this.grassWidth / 2)  + 1),
+            Zmin: Math.ceil(0 - (this.grassWidth / 2)  - 1)
+        } 
+    }
 
     update()
     {

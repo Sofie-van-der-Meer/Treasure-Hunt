@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import Experience from '../Experience.js'
+import matrix from '../matrix.js'
 
 export default class Model
 {
@@ -11,8 +12,11 @@ export default class Model
         this.source = this.resources.items[_sourcesName]
         this.sourceModel = this.resources.sources.find(obj => obj.name == _sourcesName)
         this.currentAnimation = _currentAnimation
+        this.forbiddenArea = this.experience.world.forbiddenArea
         this.time = this.experience.time
         this.debug = this.experience.debug
+        this.stonesMatrix = matrix.stones
+        this.treasuresMatrix = matrix.treasures
 
         if (this.debug.active)
         {
@@ -80,5 +84,29 @@ export default class Model
     update()
     {
         this.animation.mixer.update(this.time.delta * 0.001)
+    }
+    setNewPosition(coordinate, value, direction, key) {
+
+        let newPosition = [this.position.x, this.position.z];
+        (coordinate == 'x') ? newPosition[0] += value : newPosition[1] += value;
+        
+        this.rotation.y = direction
+
+        let newPositionIsObstacle = this.stonesMatrix.find(obj => 
+            obj[0] === newPosition[0] && obj[1] === newPosition[1])
+        
+        let posCoor = (coordinate == 'x') ? newPosition[0] : newPosition[1];
+        if (newPositionIsObstacle 
+            || posCoor == this.forbiddenArea[key]) {
+                if (this.currentAnimation._clip.name != 'Survey') {
+                    this.playAnimation('Survey')
+                }
+                return [this.position.x, this.position.z];
+            }
+            else if (this.currentAnimation._clip.name == 'Survey') {
+                this.playAnimation('Walk')
+            }
+        return newPosition
+        // (coordinate == 'x') ? this.position.x += value : this.position.z += value;
     }
 }

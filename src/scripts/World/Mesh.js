@@ -51,4 +51,19 @@ export default class Mesh
         this.mesh.receiveShadow = true
         this.scene.add(this.mesh)
     }
+    destroyMesh(mesh) {
+        if (this instanceof THREE.Mesh) {
+        mesh.geometry.dispose()
+
+        for (const key in mesh.material)
+            {
+                const value = mesh.material[key]
+
+                if (value && typeof value.dispose === 'function')
+                {
+                    value.dispose()
+                }
+            }
+        }
+    }
 }

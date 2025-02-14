@@ -2,56 +2,61 @@ import Model from "./Model.js"
 
 export default class AnimatedHunter extends Model {
     groupTick = 50
-    constructor(_sourcesName, _location) {
+    constructor(_sourcesName, _location, _treasures) {
         super(_sourcesName, _location)
         this.grassWidth = this.experience.resourcesMeshes.find(obj => obj.name == 'grass').width
-
         this.position = this.model.position
         this.rotation = this.model.rotation
+        // this.matrix = this.matrix.slice(0, -_treasures)
+        // this.treasuresMatrix = this.matrix.slice(-_treasures)
+        console.log(this.treasuresMatrix);
 
-        // this.direction = ''
-        // this.kompassDirection = 'west'
-        // this.speed = 0
-        // this.stop = false
-
-        // this.amountTicks = 0
-        // this.i = 0   
-        // this.count = 0
-
-        this.forbiddenArea = {
-            Xmax: Math.floor(0 + this.grassWidth / 2),
-            Xmin: Math.ceil(0 - this.grassWidth / 2),
-            Zmax: Math.floor(0 + this.grassWidth / 2),
-            Zmin: Math.ceil(0 - this.grassWidth / 2)
-        } 
         this.setEvents()
     }
-    update() {
-        super.update()
-    }
+    // update() {
+    //     super.update()
+    // }
     setEvents() {
-        // element.addEventListender(event, handler, [options])
         addEventListener('keydown', (event) => {
-            if (event.code == 'ArrowLeft') {
-                console.log('ArrowLeft')
-                this.changePosition('x', 1, Math.PI * 0.5)
-            }
-            if (event.code == 'ArrowUp') {
-                console.log('ArrowUp')
-                this.changePosition('z', 1, Math.PI * 0)
-            }
-            if (event.code == 'ArrowRight') {
-                console.log('ArrowRight')
-                this.changePosition('x', -1, Math.PI * 1.5)
-            }
-            if (event.code == 'ArrowDown') {
-                console.log('ArrowDown')
-                this.changePosition('z', -1, Math.PI * 1)
-            }
+            let values = 
+            (event.code == 'ArrowDown')  ? ['x',  1, Math.PI * 0.5, 'Xmax'] :
+            (event.code == 'ArrowLeft')  ? ['z',  1, Math.PI * 0.0, 'Zmax'] :
+            (event.code == 'ArrowUp')    ? ['x', -1, Math.PI * 1.5, 'Xmin'] :
+            (event.code == 'ArrowRight') ? ['z', -1, Math.PI * 1.0, 'Zmin'] :
+            [];
+            const position = this.setNewPosition(...values)
+            this.position.x = position[0]
+            this.position.z = position[1]
+
+            this.isThereATreasureHere(position)
         })
     }
-    changePosition(coordinate, value, direction) {
-        this.position[coordinate] += value;
-        this.rotation.y = direction
+    isThereATreasureHere(position) {
+        const check = this.treasuresMatrix.findIndex(obj => 
+            obj[0] === position[0] && obj[1] === position[1] )
+        console.log(check);
+        if (check != -1) {
+            let treasureMesh = this.experience.world.treasures.find(obj => 
+                obj.location.x === position[0] && obj.location.z === position[1])
+            // this.destroyTreasure(treasureMesh)
+
+            this.destroyMesh(treasureMesh)
+            document.querySelector('.transparant').classList.remove('transparant');
+        }
     }
+    // destroyTreasure(treasure) {
+    //     console.log('DESTROYYYY!!!');
+    //     if (treasure instanceof )
+    //     treasure.geometry.dispose()
+
+    //     for (const key in treasure.material)
+    //     {
+    //         const value = treasure.material[key]
+
+    //         if (value && typeof value.dispose === 'function')
+    //         {
+    //             value.dispose()
+    //         }
+    //     }
+    // }
 }
