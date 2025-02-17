@@ -2,14 +2,11 @@ import Model from "./Model.js"
 
 export default class AnimatedHunter extends Model {
     groupTick = 50
-    constructor(_sourcesName, _location, _treasures) {
-        super(_sourcesName, _location)
+    constructor(_sourcesName, _location, _treasures, _startPosition) {
+        super(_sourcesName, _location, _startPosition)
         this.grassWidth = this.experience.resourcesMeshes.find(obj => obj.name == 'grass').width
         this.position = this.model.position
         this.rotation = this.model.rotation
-        // this.matrix = this.matrix.slice(0, -_treasures)
-        // this.treasuresMatrix = this.matrix.slice(-_treasures)
-        console.log(this.treasuresMatrix);
 
         this.setEvents()
     }
@@ -29,34 +26,37 @@ export default class AnimatedHunter extends Model {
             this.position.z = position[1]
 
             this.isThereATreasureHere(position)
+
+            this.experience.dom.checkEndOfGame('Treasures', 'wonGame')
         })
     }
     isThereATreasureHere(position) {
         const check = this.treasuresMatrix.findIndex(obj => 
             obj[0] === position[0] && obj[1] === position[1] )
-        console.log(check);
-        if (check != -1) {
-            let treasureMesh = this.experience.world.treasures.find(obj => 
-                obj.location.x === position[0] && obj.location.z === position[1])
-            // this.destroyTreasure(treasureMesh)
 
-            this.destroyMesh(treasureMesh)
-            document.querySelector('.transparant').classList.remove('transparant');
+        if (check >= 0) {
+            const treasureMesh = this.scene.children.findIndex(obj => 
+                   obj.position.x === position[0] 
+                && obj.position.z === position[1] 
+                && obj.isMesh)
+            
+            this.destroyTreasure(this.scene.children[treasureMesh])
+            this.treasuresMatrix[check] = [100, 100]
+            this.experience.dom.modifyListElement('add', 'Treasures')
         }
     }
-    // destroyTreasure(treasure) {
-    //     console.log('DESTROYYYY!!!');
-    //     if (treasure instanceof )
-    //     treasure.geometry.dispose()
+    destroyTreasure(treasure) {
+        treasure.geometry.dispose()
 
-    //     for (const key in treasure.material)
-    //     {
-    //         const value = treasure.material[key]
+        for (const key in treasure.material)
+        {
+            const value = treasure.material[key]
 
-    //         if (value && typeof value.dispose === 'function')
-    //         {
-    //             value.dispose()
-    //         }
-    //     }
-    // }
+            if (value && typeof value.dispose === 'function')
+            {
+                value.dispose()
+            }
+        }
+        this.scene.remove(treasure)
+    }
 }

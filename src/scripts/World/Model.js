@@ -4,7 +4,7 @@ import matrix from '../matrix.js'
 
 export default class Model
 {
-    constructor(_sourcesName, _currentAnimation)
+    constructor(_sourcesName, _currentAnimation, _startPosition)
     {
         this.experience = new Experience()
         this.scene = this.experience.scene
@@ -12,6 +12,7 @@ export default class Model
         this.source = this.resources.items[_sourcesName]
         this.sourceModel = this.resources.sources.find(obj => obj.name == _sourcesName)
         this.currentAnimation = _currentAnimation
+        this.startPosition = _startPosition
         this.forbiddenArea = this.experience.world.forbiddenArea
         this.time = this.experience.time
         this.debug = this.experience.debug
@@ -34,6 +35,8 @@ export default class Model
         this.model = this.source.scene
         this.model.scale.set(this.sourceModel.scale, this.sourceModel.scale,
             this.sourceModel.scale)
+        this.model.position.x = this.startPosition[0]
+        this.model.position.z = this.startPosition[1]
         this.scene.add(this.model)
 
         this.model.traverse((child) => child.castShadow = (child instanceof THREE.Mesh))
@@ -107,6 +110,26 @@ export default class Model
                 this.playAnimation('Walk')
             }
         return newPosition
-        // (coordinate == 'x') ? this.position.x += value : this.position.z += value;
     }
+    // checkEndOfGame(check, dialogId) {
+    //     if (!check) {
+    //         const dialog = document.getElementById(dialogId)
+
+    //         setTimeout(() => dialog.showModal(), 1000)
+    //         const playAgainBtn = dialog.querySelector('.playAgain')
+    //         const playHarderBtn = dialog.querySelector('.playHarder')
+
+    //         playAgainBtn.addEventListener('click', () => {
+    //             this.world.newGame('sameLevel')
+    //             dialog.close()
+    //         })
+    //         if (playHarderBtn) {
+    //             playHarderBtn.addEventListener('click', () => {
+    //                 this.world.newGame('higherLevel')
+    //                 dialog.close()
+    //             })
+    //         }
+
+    //     }
+    // }
 }

@@ -13,4 +13,19 @@ export default class AnimatedMesh extends Mesh {
         this.mesh.position.y = (Math.sin(timeCoordinate) * 0.1) + this.resource.y
         // console.log(this.time.delta);
     }
+    destroyMesh(mesh) {
+        if (this instanceof THREE.Mesh) {
+        mesh.geometry.dispose()
+
+        for (const key in mesh.material)
+            {
+                const value = mesh.material[key]
+
+                if (value && typeof value.dispose === 'function')
+                {
+                    value.dispose()
+                }
+            }
+        }
+    }
 }

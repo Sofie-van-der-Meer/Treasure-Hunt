@@ -15,6 +15,19 @@ body {
     outline: none;
     z-index: -1;
 }
+#listOfLives::before, #listOfTreasures::before {
+    display: inline;
+    font-weight: bold;
+    font-size: 1.25rem;
+    text-transform: uppercase;
+    align-self: center;
+}
+#listOfLives::before {
+    content: 'Lives:';
+}
+#listOfTreasures::before {
+    content: 'Treasures:';
+}
 ul {
     display: flex;
     list-style-type: none;
@@ -25,14 +38,45 @@ li {
     padding: 0.5rem;
 }
 
-svg {
-    width: auto;
-    height: 2rem;
-    fill: #B6174B;
-}
 
-.transparant svg {
+i {
+    /* width: auto;
+    height: 2rem; */
+    color: #B6174B;
+}
+.fa-regular {
     opacity: 0.25;
 }
-
+/* 
+.transparant i {
+    opacity: 0.25;
+} */
+dialog {
+    width: 80vw;
+    height: 80vh;
+    margin: auto;
+    background-color: #F3FFC6;
+    opacity: 0.5;
+    border: #B6174B 3px solid;
+    text-align: center;
+    h1 {
+        padding-top: 30vh;
+    }
+    button {
+        margin: 1rem;
+        padding: 0.5rem;
+        background-color: hsl(340, 78%, 20%);
+        color: #F3FFC6;
+        font-weight: bold;
+        border: none;
+        border-radius: 0.75rem;
+    }
+}    
+button[autofocus]:focus,
+button:focus {
+    background-color: #B6174B;
+}
+::backdrop {
+    /* background-color: #F3FFC6; */
+}
 

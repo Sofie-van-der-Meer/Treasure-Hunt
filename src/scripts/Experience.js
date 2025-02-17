@@ -9,6 +9,7 @@ import World from './World/World.js'
 
 import sourcesModels from './sourcesModels.js'
 import sourcesMeshes from './sourcesMeshes.js'
+import DomManupulation from './DomManupulation.js'
 
 let instance = null;
 
@@ -17,6 +18,7 @@ export default class Experience {
         if(instance) return instance;
         instance = this
 
+        this.dom = new DomManupulation()
         this.canvas = _canvas
         this.debug = new Debug()
         this.sizes = new Sizes()
@@ -50,28 +52,60 @@ export default class Experience {
         this.sizes.off('resize')
         this.time.off('tick')
 
-        this.scene.traverse((child) =>
-        {
+        while(this.scene.children.length) {
+            const child = this.scene.children[0]
             if (child instanceof THREE.Mesh)
-            {
-                child.geometry.dispose()
-
-                for (const key in child.material)
                 {
-                    const value = child.material[key]
-
-                    if (value && typeof value.dispose === 'function')
+                    this.scene.remove(child)
+                    child.geometry.dispose()
+    
+                    for (const key in child.material)
                     {
-                        value.dispose()
+                        const value = child.material[key]
+    
+                        if (value && typeof value.dispose === 'function')
+                        {
+                            value.dispose()
+                        }
                     }
                 }
+            else {
+                if (child.type !== 'PerspectiveCamera') {
+                console.log('unhandeled scene object: ', child)
+// work here tomorrow
+                }
             }
-        })
+        }
 
+        // this.scene.forEach((child) =>
+        // {
+        //     if (child instanceof THREE.Mesh)
+        //     {
+        //         this.scene.remove(child)
+        //         child.geometry.dispose()
+
+        //         for (const key in child.material)
+        //         {
+        //             const value = child.material[key]
+
+        //             if (value && typeof value.dispose === 'function')
+        //             {
+        //                 value.dispose()
+        //             }
+        //         }
+        //     }
+        // })
+
+        this.scene.dispose()
         this.camera.controls.dispose()
         this.renderer.instance.dispose()
 
         if(this.debug.active)
             this.debug.ui.destroy()
+    }
+    
+    newGame(levelUp) {
+        console.log(levelUp);
+        
     }
 }

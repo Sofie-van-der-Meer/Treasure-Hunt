@@ -28,8 +28,11 @@ export default class World
     setModels() {
         this.resourcesModels.on('ready', () =>
         {
-            this.fox = new AnimatedEnemy('fox', 'Survey')
-            this.mouse = new AnimatedHunter('mouse', 'Survey', this.parameters.amountTreasures)
+            this.mouse = new AnimatedHunter('mouse', 'Survey', this.parameters.amountTreasures, [3, 3])
+            this.fox = new AnimatedEnemy('fox', 'Survey', this.mouse, [-3, -3])
+
+            // const enemy = new AnimatedEnemy('fox', 'Survey')
+            // new AnimatedHunter('mouse', 'Survey', this.parameters.amountTreasures, enemy)
         })
     }
 
