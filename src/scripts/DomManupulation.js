@@ -1,30 +1,21 @@
 import Experience from "./Experience";
-import parameters from "./parameters";
 
 export default class DomManupulation {
     constructor() {
-        this.parameters = parameters
         this.experience = new Experience()
         this.listOfLives = document.getElementById('listOfLives')
         this.listOfTreasures = document.getElementById('listOfTreasures')
-        this.dialog = []
-        this.dialog.introGame = document.getElementById('introGame')
-        this.dialog.wonGame = document.getElementById('wonGame')
-        this.dialog.lostGame = document.getElementById('lostGame')
-
-
-        let amountLives = this.getParameter('easy', 'amountLives')
-        let amountTreasures = this.getParameter('easy', 'amountTreasures')
+        let amountLives = this.experience.world.parameters.amountLives
+        let amountTreasures = this.experience.world.parameters.amountTreasures
 
         this.setList(amountLives, this.listOfLives, 'life', 'solid', 'heart')
         this.setList(amountTreasures, this.listOfTreasures, 'treasure', 'regular', 'gem')
     }
 
-    getParameter(levelName, key)  {
-        return parameters.find(obj => obj.level == levelName)[key]
-    }
-
     setList(parameter, parent, listElName, iconStyle, iconName) {
+        if (parent.children.length > 0) {
+            this.clearList(parent)
+        }
         let fragment = new DocumentFragment();
         for (let j = 0; j < parameter; j++) {
             let li = document.createElement('li')
@@ -38,57 +29,61 @@ export default class DomManupulation {
         }
         parent.append(fragment)
     }
-    modifyListElement(action, listName) {
-        console.log(this[`listOf${listName}`])
-        let nodeList =  this[`listOf${listName}`]
-        if (action == 'add') {
-            let node = nodeList.querySelector('.fa-regular')
-            console.log(node);
-            node.classList.remove('fa-regular')
-            node.classList.add('fa-solid')
-        }
-        else if (action == 'remove') {
-            let node = nodeList.querySelectorAll('.fa-solid')
-            console.log(node);
-            console.log(node[node.length - 1])
-            node[node.length - 1].classList.remove('fa-solid')
-            node[node.length - 1].classList.add('fa-regular')
-        }
+    clearList(parent) {
+        let children = parent.querySelectorAll('li')
+        children.forEach(child => {
+            child.remove()
+        });
     }
-    checkEndOfGame(listName, dialogName) {
+
+    modifyListElement(listName) {
+        let nodeList =  this[`listOf${listName}`]
+        const changeClassName = function (nodeList, oldClassName, newClassname, position) {
+            let node
+            if (position) {
+                node = nodeList.querySelectorAll(`.${oldClassName}`)
+                node = node[node.length + position]
+            } else node = nodeList.querySelector(`.${oldClassName}`)
+            if (node && node.classList) {
+                node.classList.remove(oldClassName)
+                node.classList.add(newClassname)
+            }
+        }
+
+        if (listName == 'Treasures') {
+            changeClassName(nodeList, 'fa-regular', 'fa-solid', 0)
+        }
+        else if (listName == 'Lives') {
+            changeClassName(nodeList, 'fa-solid', 'fa-regular', - 1)
+        }
+        this.checkEndOfGame(listName)
+    }
+    checkEndOfGame(listName) {
         let check = 1
-        const nodeList =  this[`listOf${listName}`]
-        if (listName == 'Lives') {
-            check = nodeList.querySelector('.fa-solid')
-        }
-        else if (listName == 'Treasures') {
-            check = nodeList.querySelector('.fa-regular')
-        }
-        if (!check) {
-            // this.setEndGame(dialogName)
-            setTimeout(() => this.setEndGame(dialogName), 1000)
-        }
+        let className
+        let dialogName
+        const nodeList =  this[`listOf${listName}`];
+
+        (listName == 'Lives') ? className = 'fa-solid' :
+        (listName == 'Treasures') ? className = 'fa-regular' :
+        className = '';
+
+        check = nodeList.querySelector(`.${className}`)
+
+        if (check) return;
+
+        (listName == 'Lives') ? dialogName = 'lostGame' :
+        (listName == 'Treasures') ? dialogName = 'wonGame' :
+        dialogName = '';
+
+        setTimeout(() => this.setEndGame(dialogName), 500)
 
     }
     setEndGame(dialogName) {
-            const dialog = this.dialog[dialogName]
-            dialog.showModal()
-            this.experience.destroy()
-            document.querySelector('canvas.webgl').remove()
-
-            const playAgainBtn = dialog.querySelector('.playAgain')
-            const playHarderBtn = dialog.querySelector('.playHarder')
-
-            playAgainBtn.addEventListener('click', () => {
-                this.experience.newGame('sameLevel')
-                dialog.close()
-            })
-            if (playHarderBtn) {
-                playHarderBtn.addEventListener('click', () => {
-                    this.experience.newGame('higherLevel')
-                    dialog.close()
-                })
-            }
-
+        const dialog = document.getElementById(dialogName)
+        dialog.showModal()
+        this.experience.destroy()
+        const oldCanvas = document.querySelector('canvas.webgl')
+        if (oldCanvas) oldCanvas.remove()
     }
 }

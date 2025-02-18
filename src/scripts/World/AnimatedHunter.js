@@ -10,9 +10,6 @@ export default class AnimatedHunter extends Model {
 
         this.setEvents()
     }
-    // update() {
-    //     super.update()
-    // }
     setEvents() {
         addEventListener('keydown', (event) => {
             let values = 
@@ -21,13 +18,13 @@ export default class AnimatedHunter extends Model {
             (event.code == 'ArrowUp')    ? ['x', -1, Math.PI * 1.5, 'Xmin'] :
             (event.code == 'ArrowRight') ? ['z', -1, Math.PI * 1.0, 'Zmin'] :
             [];
-            const position = this.setNewPosition(...values)
-            this.position.x = position[0]
-            this.position.z = position[1]
+            if (values.length > 0) {
+                const position = this.setNewPosition(...values)
+                this.position.x = position[0]
+                this.position.z = position[1]
 
-            this.isThereATreasureHere(position)
-
-            this.experience.dom.checkEndOfGame('Treasures', 'wonGame')
+                this.isThereATreasureHere(position)
+            }
         })
     }
     isThereATreasureHere(position) {
@@ -42,7 +39,7 @@ export default class AnimatedHunter extends Model {
             
             this.destroyTreasure(this.scene.children[treasureMesh])
             this.treasuresMatrix[check] = [100, 100]
-            this.experience.dom.modifyListElement('add', 'Treasures')
+            this.experience.dom.modifyListElement('Treasures')
         }
     }
     destroyTreasure(treasure) {

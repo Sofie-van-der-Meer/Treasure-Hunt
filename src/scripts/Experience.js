@@ -14,12 +14,12 @@ import DomManupulation from './DomManupulation.js'
 let instance = null;
 
 export default class Experience {
-    constructor(_canvas) {
+    constructor(_canvas, _level) {
         if(instance) return instance;
         instance = this
 
-        this.dom = new DomManupulation()
         this.canvas = _canvas
+        this.level = _level
         this.debug = new Debug()
         this.sizes = new Sizes()
         this.time = new Time()
@@ -29,6 +29,7 @@ export default class Experience {
         this.camera = new Camera()
         this.renderer = new Renderer()
         this.world = new World()
+        this.dom = new DomManupulation()
 
         this.sizes.on('resize', () => this.resize());
         this.time.on('tick', () => this.update());
@@ -46,66 +47,33 @@ export default class Experience {
         this.world.update()
         this.renderer.update()
     }
-
-    destroy()
-    {
+    
+    destroy() {
+        
         this.sizes.off('resize')
         this.time.off('tick')
 
-        while(this.scene.children.length) {
-            const child = this.scene.children[0]
+        this.scene.traverse( (child) => 
+        {
             if (child instanceof THREE.Mesh)
+            {
+                child.geometry.dispose()
+        
+                for (const key in child.material)
                 {
-                    this.scene.remove(child)
-                    child.geometry.dispose()
-    
-                    for (const key in child.material)
+                    const value = child.material[key]
+        
+                    if (value && typeof value.dispose === 'function')
                     {
-                        const value = child.material[key]
-    
-                        if (value && typeof value.dispose === 'function')
-                        {
-                            value.dispose()
-                        }
+                        value.dispose()
                     }
                 }
-            else {
-                if (child.type !== 'PerspectiveCamera') {
-                console.log('unhandeled scene object: ', child)
-// work here tomorrow
-                }
             }
-        }
-
-        // this.scene.forEach((child) =>
-        // {
-        //     if (child instanceof THREE.Mesh)
-        //     {
-        //         this.scene.remove(child)
-        //         child.geometry.dispose()
-
-        //         for (const key in child.material)
-        //         {
-        //             const value = child.material[key]
-
-        //             if (value && typeof value.dispose === 'function')
-        //             {
-        //                 value.dispose()
-        //             }
-        //         }
-        //     }
-        // })
-
-        this.scene.dispose()
+        })
+        
         this.camera.controls.dispose()
         this.renderer.instance.dispose()
+        instance = null
 
-        if(this.debug.active)
-            this.debug.ui.destroy()
     }
-    
-    newGame(levelUp) {
-        console.log(levelUp);
-        
-    }
-}
+}   

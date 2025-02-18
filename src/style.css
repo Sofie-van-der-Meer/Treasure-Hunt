@@ -15,7 +15,8 @@ body {
     outline: none;
     z-index: -1;
 }
-#listOfLives::before, #listOfTreasures::before {
+#listOfLives::before, 
+#listOfTreasures::before {
     display: inline;
     font-weight: bold;
     font-size: 1.25rem;
@@ -38,29 +39,24 @@ li {
     padding: 0.5rem;
 }
 
-
 i {
-    /* width: auto;
-    height: 2rem; */
     color: #B6174B;
 }
 .fa-regular {
     opacity: 0.25;
 }
-/* 
-.transparant i {
-    opacity: 0.25;
-} */
 dialog {
     width: 80vw;
     height: 80vh;
     margin: auto;
     background-color: #F3FFC6;
-    opacity: 0.5;
     border: #B6174B 3px solid;
     text-align: center;
     h1 {
-        padding-top: 30vh;
+        padding-top: 25vh;
+    }
+    h2 {
+        padding: 2rem;
     }
     button {
         margin: 1rem;
@@ -77,6 +73,6 @@ button:focus {
     background-color: #B6174B;
 }
 ::backdrop {
-    /* background-color: #F3FFC6; */
+    background-color: #F3FFC6;
 }
 

@@ -1,19 +1,20 @@
 import Experience from "./scripts/Experience.js";
 
-new Experience(document.querySelector('canvas.webgl'));
+const dialogIntroGame = document.getElementById('introGame')
+dialogIntroGame.showModal()
 
-// const dialogWonGame = document.querySelector('#wonGame')
-// const dialogLostGame = document.querySelector('#lostGame')
-// const playAgainBtn = document.querySelector('.playAgain')
-// const playHarderBtn = document.querySelector('.playHarder')
+const play = document.querySelectorAll('.play')
+play.forEach(btn => {
+    btn.addEventListener('click', () => {
+        if (!document.querySelector('canvas.webgl')) {
+            const canvas = document.createElement('canvas')
+            canvas.classList.add('webgl')
+            document.body.prepend(canvas)
+        }
+        const canvas = document.querySelector('canvas.webgl')
+        new Experience(canvas, btn.classList[1]);
 
-// playAgainBtn.addEventListener('click', () => {
-//     new Experience(document.querySelector('canvas.webgl'), 'easy');
-//     dialogWonGame.close()
-// })
-// if (playHarderBtn) {
-//     playHarderBtn.addEventListener('click', () => {
-//         new Experience(document.querySelector('canvas.webgl'), 'medium');
-//         dialogLostGame.close()
-//     })
-// }
+        document.querySelector('dialog[open]').close()
+    })
+    
+});

@@ -16,8 +16,8 @@ export default class World
         this.scene = this.experience.scene
         this.resourcesModels = this.experience.resourcesModels
         this.grassWidth = this.experience.resourcesMeshes.find(obj => obj.name == 'grass').width
-        this.parameters = parameters.find(obj => obj.level == 'easy')
-        this.matrix = matrix
+        this.parameters = parameters.find(obj => obj.level == this.experience.level)
+        this.matrix = new matrix(this.parameters.amountStones, this.parameters.amountTreasures, this.grassWidth)
         this.forbiddenArea = {}
 
         this.setBoundries()
@@ -28,11 +28,8 @@ export default class World
     setModels() {
         this.resourcesModels.on('ready', () =>
         {
-            this.mouse = new AnimatedHunter('mouse', 'Survey', this.parameters.amountTreasures, [3, 3])
-            this.fox = new AnimatedEnemy('fox', 'Survey', this.mouse, [-3, -3])
-
-            // const enemy = new AnimatedEnemy('fox', 'Survey')
-            // new AnimatedHunter('mouse', 'Survey', this.parameters.amountTreasures, enemy)
+            this.mouse = new AnimatedHunter('mouse', 'Survey', this.parameters.amountTreasures, this.matrix.models[0])
+            this.fox = new AnimatedEnemy('fox', 'Survey', this.mouse, this.matrix.models[1])
         })
     }
 
@@ -46,6 +43,7 @@ export default class World
             const location = new THREE.Vector3(this.matrix.stones[i][0], randomY, this.matrix.stones[i][1])
             this.stone = new Mesh('stone', location);
         }
+
         this.treasures = []
         for (let i = 0; i < this.parameters.amountTreasures; i++) {
             const location = new THREE.Vector3(this.matrix.treasures[this.matrix.treasures.length - 1 - i][0], 0.35, this.matrix.treasures[this.matrix.treasures.length - 1 - i][1])
