@@ -19,6 +19,7 @@ export default class World
         this.parameters = parameters.find(obj => obj.level == this.experience.level)
         this.matrix = new matrix(this.parameters.amountStones, this.parameters.amountTreasures, this.grassWidth)
         this.forbiddenArea = {}
+        console.log(this.matrix);
 
         this.setBoundries()
         this.setModels()

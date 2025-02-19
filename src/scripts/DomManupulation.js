@@ -81,7 +81,8 @@ export default class DomManupulation {
     }
     setEndGame(dialogName) {
         const dialog = document.getElementById(dialogName)
-        dialog.showModal()
+        // dialog.showModal()
+        dialog.hidden = false
         this.experience.destroy()
         const oldCanvas = document.querySelector('canvas.webgl')
         if (oldCanvas) oldCanvas.remove()

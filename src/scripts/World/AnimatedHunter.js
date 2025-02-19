@@ -26,6 +26,24 @@ export default class AnimatedHunter extends Model {
                 this.isThereATreasureHere(position)
             }
         })
+        const kbdBtns = document.querySelectorAll('.kbdBtn')
+        kbdBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                let values = 
+                    (btn.id == 'kbdDown')  ? ['x',  1, Math.PI * 0.5, 'Xmax'] :
+                    (btn.id == 'kbdLeft')  ? ['z',  1, Math.PI * 0.0, 'Zmax'] :
+                    (btn.id == 'kbdUp')    ? ['x', -1, Math.PI * 1.5, 'Xmin'] :
+                    (btn.id == 'kbdRight') ? ['z', -1, Math.PI * 1.0, 'Zmin'] :
+                    [];
+                if (values.length > 0) {
+                    const position = this.setNewPosition(...values)
+                    this.position.x = position[0]
+                    this.position.z = position[1]
+
+                    this.isThereATreasureHere(position)
+                }
+            })
+        })
     }
     isThereATreasureHere(position) {
         const check = this.treasuresMatrix.findIndex(obj => 

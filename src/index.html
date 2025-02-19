@@ -9,33 +9,48 @@
 </head>
 <body>
     <canvas class="webgl"></canvas>
-    <h1>Treasure hunt</h1>
-    <ul id="listOfLives">
-    </ul>
-    <ul id="listOfTreasures">
-    </ul>
-    <dialog id="introGame">
+    <header>
+        <h1>Treasure hunt</h1>
+        <section class="lists">
+            <ul id="listOfLives">
+            </ul>
+            <ul id="listOfTreasures">
+            </ul>             
+        </section>
+       
+    </header>
+    <div id="introScreen">
+        <h1>Treasure hunt</h1>
+        <button id="toggleFullScreen">Go full screen</button>
+    </div>
+    <div id="introGame" hidden>
         <h1>Hey little fox!</h1>
         <h2>The forest is full of yummy berries, but watch out — the mother fox is chasing you! Use the arrow keys to move and collect all the berries. Don’t let the mother fox catch you, or you’ll lose a life! Can you get all the berries before you run out of lives?</h2>
         
         <button class="play easy">Easy</button>
         <button class="play medium">Medium</button>
         <button class="play hard">Hard</button>
-    </dialog>
-    <dialog id="wonGame">
+    </div>
+    <div id="wonGame" hidden>
         <h1>Victory! All the berries are yours <br> well played, little fox!</h1>
         <h2>Let’s see if you can do it again!</h2>
         <button class="play easy">Easy</button>
         <button class="play medium">Medium</button>
         <button class="play hard">Hard</button>
-    </dialog>
-    <dialog id="lostGame">
+    </div>
+    <div id="lostGame" hidden>
         <h1>Berry bad luck! The mother fox took you down!</h1>
         <h2>Play again and try to win!</h2>
         <button class="play easy">Easy</button>
         <button class="play medium">Medium</button>
         <button class="play hard">Hard</button>
-    </dialog>
+    </div>
+    <kbd class="mobile-only center">
+        <button class="kbdBtn" id="kbdUp"><i class="fa-regular fa-square-caret-up fa-3x"></i></button><br>
+        <button class="kbdBtn" id="kbdLeft"><i class="fa-regular fa-square-caret-left fa-3x"></i></button>
+        <button class="kbdBtn" id="kbdDown"><i class="fa-regular fa-square-caret-down fa-3x"></i></button>
+        <button class="kbdBtn" id="kbdRight"><i class="fa-regular fa-square-caret-right fa-3x"></i></button>
+    </kbd>
     <script type="module" src="./script.js"></script>
 </body>
 </html>

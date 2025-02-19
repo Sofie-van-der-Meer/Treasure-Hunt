@@ -1,10 +1,28 @@
 import Experience from "./scripts/Experience.js";
 
+const dialogIntroScreen = document.getElementById('introScreen')
 const dialogIntroGame = document.getElementById('introGame')
-dialogIntroGame.showModal()
+const fullScreenBtn = document.getElementById('toggleFullScreen')
+fullScreenBtn.addEventListener('click', () => {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+        dialogIntroScreen.hidden = true
+        dialogIntroGame.hidden = false
+    }
+    else if (document.exitFullscreen) {
+        document.exitFullscreen();
+    }
+})
 
-const play = document.querySelectorAll('.play')
-play.forEach(btn => {
+if (screen.width < screen.height) {
+    alert('set your device on landscape ')
+}
+
+
+
+
+const playBtns = document.querySelectorAll('.play')
+playBtns.forEach(btn => {
     btn.addEventListener('click', () => {
         if (!document.querySelector('canvas.webgl')) {
             const canvas = document.createElement('canvas')
@@ -14,7 +32,10 @@ play.forEach(btn => {
         const canvas = document.querySelector('canvas.webgl')
         new Experience(canvas, btn.classList[1]);
 
-        document.querySelector('dialog[open]').close()
+        // document.querySelector('dialog[open]').close()
+        document.querySelector('div:not([hidden])').hidden = true
     })
     
 });
+
+
