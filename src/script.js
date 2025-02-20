@@ -3,11 +3,22 @@ import Experience from "./scripts/Experience.js";
 const dialogIntroScreen = document.getElementById('introScreen')
 const dialogIntroGame = document.getElementById('introGame')
 const fullScreenBtn = document.getElementById('toggleFullScreen')
+
+function isTouchDevice() {
+    return 'ontouchstart' in window || navigator.maxTouchPoints > 0
+}
+
+
 fullScreenBtn.addEventListener('click', () => {
     if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen();
+
         dialogIntroScreen.hidden = true
         dialogIntroGame.hidden = false
+
+        if (isTouchDevice()) {
+            document.body.classList.add('touch-device')
+        } else document.body.classList.add('non-touch-device')
     }
     else if (document.exitFullscreen) {
         document.exitFullscreen();

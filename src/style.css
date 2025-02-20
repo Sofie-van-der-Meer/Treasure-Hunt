@@ -1,6 +1,7 @@
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 html,
@@ -12,31 +13,47 @@ body {
 body {
     background-color: #F3FFC6;
 }
+.touch-device {
+    .webgl {
+        width: 75%;
+    } 
+    kbd {
+        width: 25%;
+        min-width: calc(3 * 80px);
+    }  
+}
+.non-touch-device {
+    .webgl {
+        width: 100%;
+    }
+    kbd {
+        display: none;
+    }
+}
 .webgl,
 kbd {
     position: fixed;
     outline: none;
-    z-index: -1;
     height: 100%;
 }
 .webgl {
     top: 0;
     left: 0;
-    width: 75%;
+    z-index: -1;
 }
 kbd {
     top: 0;
     right: 0;
-    width: 25%;
     align-content: center;
     text-align: center;
-    padding: 3rem 2rem 0 0 ;
+    padding-top: 3rem;
+    button {
+        padding: 1rem 0.75rem;
+        background-color: transparent;
+        border: none;
+    }
 }
-kbd button {
-    padding: 1rem 0.75rem;
-    background-color: transparent;
-    border: none;
-}
+
 header {
     display: flex;
     justify-content: space-between;
@@ -50,51 +67,45 @@ ul {
 }
 li {
     padding: 0.5rem;
+    .fa-regular {
+        opacity: 0.25;
+    }
 }
-
 i {
     color: #B6174B;
 }
-li .fa-regular {
-    opacity: 0.25;
-}
-dialog, div {
+div {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 9999;
     width: 100%;
-    max-width: 1000px;
     height: 100%;
-
     background-color: #F3FFC6;
-    /* border: #B6174B 3px solid; */
     text-align: center;
     align-content: center;
     h2 {
         padding: 1rem;
     } 
+    button {
+        margin: 1rem;
+        padding: 0.5rem;
+        background-color: hsl(340, 78%, 20%);
+        color: #F3FFC6;
+        font-weight: bold;
+        border: none;
+        border-radius: 0.75rem;
+    } 
+    button[autofocus]:focus,
+    button:focus {
+        background-color: #B6174B;
+    }   
+}  
 
-}    
-div button {
-    margin: 1rem;
-    padding: 0.5rem;
-    background-color: hsl(340, 78%, 20%);
-    color: #F3FFC6;
-    font-weight: bold;
-    border: none;
-    border-radius: 0.75rem;
-}    
-div button[autofocus]:focus,
-div button:focus {
-    background-color: #B6174B;
-}
-
-/* mobile device only */
 @media (min-width: 600px) and (min-height: 600px) {
-    .mobile-only {
-        display: none;
+    div {
+        padding-inline: calc((100% - 600px) / 2);
     }
 }
 
